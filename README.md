@@ -177,3 +177,5 @@ Anna University, Chennai
 ## License
 
 This project is developed for academic and research purposes.
+## Research Paper
+[View Research Paper](https://ijpub.org/ijvra/papers/IJVRA2605254.pdf)
