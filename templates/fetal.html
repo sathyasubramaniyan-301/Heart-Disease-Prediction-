@@ -1,0 +1,519 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title> Risk Assessment</title>
+    <link
+      href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.2/css/all.min.css"
+    />
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Roboto", sans-serif;
+      }
+
+      :root {
+        /* Brand palette */
+        --brand-brown: #5d473a;
+        --brand-red: #d72638;
+        --brand-green: #2e8b57;
+        --bg-light: #f5f5f5;
+        --text-dark: #333333;
+        --accent-yellow: #ffcc00;
+        --accent-blue: #00aeef;
+
+        /* App theme tokens mapped to brand palette */
+        --primary-color: var(--brand-green);
+        --secondary-color: var(--accent-blue);
+        --accent-color: var(--accent-yellow);
+        --dark-color: var(--text-dark);
+        --light-color: var(--bg-light);
+      }
+
+      body {
+        min-height: 100vh;
+        /* Modern earthy-to-clean gradient overlay using new palette */
+        background:
+          linear-gradient(
+            135deg,
+            rgba(93, 71, 58, 0.92),
+            rgba(0, 174, 239, 0.88)
+          ),
+          url("/api/placeholder/1920/1080") center/cover fixed;
+        padding: 2rem 1rem;
+        color: var(--dark-color);
+      }
+      nav {
+        background: rgba(224, 224, 224, 0.048);
+        position: fixed;
+        width: 100%;
+        top: 0;
+        z-index: 1000;
+        transition: all 0.3s ease;
+      }
+
+      nav.scrolled {
+        background: var(--brand-brown);
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      }
+
+      nav .topNav {
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        padding: 8px 0;
+      }
+
+      nav .bottomNav {
+        padding: 16px 0;
+      }
+
+      nav .container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .menu a {
+        color: white;
+        text-decoration: none;
+        margin-left: 24px;
+        font-weight: 500;
+        transition: color 0.3s ease;
+      }
+
+      .menu a:hover {
+        color: var(--accent-color);
+      }
+
+      .container {
+        max-width: 1000px;
+        margin: 0 auto;
+      }
+
+      .container-heading {
+        text-align: center;
+        margin-bottom: 2rem;
+        color: white;
+      }
+
+      .heading_font {
+        font-size: 2.5rem;
+        font-weight: 700;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+      }
+
+      .ml-container {
+        background: rgba(245, 245, 245, 0.98); /* aligns with #F5F5F5 */
+        border-radius: 15px;
+        padding: 2rem;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        animation: fadeIn 0.5s ease;
+      }
+
+      .form-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 1.5rem;
+      }
+
+      .input-group {
+        position: relative;
+      }
+
+      h3 {
+        color: var(--dark-color);
+        font-size: 0.9rem;
+        margin-bottom: 0.5rem;
+        font-weight: 500;
+      }
+
+      input {
+        width: 100%;
+        padding: 0.75rem;
+        border: 2px solid #e0e0e0;
+        border-radius: 8px;
+        font-size: 0.95rem;
+        transition: all 0.3s ease;
+        background: white;
+      }
+
+      input:focus {
+        outline: none;
+        border-color: var(--primary-color);
+        box-shadow: 0 0 0 3px rgba(46, 139, 87, 0.25); /* green focus glow */
+      }
+
+      input::placeholder {
+        color: #9e9e9e;
+      }
+
+      #sub {
+        width: 100%;
+        max-width: 300px;
+        margin: 2rem auto 0;
+        display: block;
+        padding: 1rem;
+        background: var(--primary-color);
+        color: white;
+        border: none;
+        border-radius: 8px;
+        font-size: 1rem;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+
+      #sub:hover {
+        background: var(--secondary-color);
+        transform: translateY(-2px);
+      }
+
+      /* Back to Home Button */
+      .back-home {
+        position: fixed;
+        top: 20px;
+        left: 20px;
+        padding: 0.5rem 1rem;
+        background: rgba(255, 255, 255, 0.9);
+        border-radius: 8px;
+        text-decoration: none;
+        color: var(--primary-color);
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        transition: all 0.3s ease;
+      }
+
+      .back-home:hover {
+        background: white;
+        transform: translateY(-2px);
+      }
+
+      .info-tooltip {
+        position: absolute;
+        right: -25px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: var(--primary-color);
+        cursor: pointer;
+      }
+
+      .info-tooltip .tooltip-text {
+        visibility: hidden;
+        background-color: var(--dark-color);
+        color: white;
+        text-align: center;
+        padding: 5px 10px;
+        border-radius: 6px;
+        position: absolute;
+        z-index: 1;
+        width: 200px;
+        left: 50%;
+        transform: translateX(-50%);
+        bottom: 100%;
+        opacity: 0;
+        transition: opacity 0.3s;
+        font-size: 0.8rem;
+      }
+
+      .info-tooltip:hover .tooltip-text {
+        visibility: visible;
+        opacity: 1;
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(-20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @media (max-width: 768px) {
+        .container-heading {
+          margin-top: 3rem;
+        }
+
+        .heading_font {
+          font-size: 2rem;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <nav>
+      <div class="bottomNav">
+        <div class="container">
+          <div class="logo">
+            <h1 style="color: white">
+              Heart Attack
+              <span style="color: var(--accent-color)"
+                >Risk Prediction</span
+              >
+            </h1>
+          </div>
+          <div class="menu">
+            <a href="/adult">Adult</a>
+            <a href="/child">Child</a>
+            <a href="/fetal">Fetal</a>
+            <a href="/perf">Performance</a>
+                        <a href="/upload">Retina</a>
+
+
+          </div>
+        </div>
+      </div>
+    </nav>
+    <div>
+      <br />
+      <br />
+      <br />
+      <br />
+    </div>
+    <div class="container">
+      <div class="container-heading">
+        <h2 class="heading_font">Health Risk Assessment For Fetal</h2>
+        <p style="color: white; margin-top: 1rem">
+          Enter Adult data for analysis
+        </p>
+      </div>
+
+      <div class="ml-container">
+        <form action="{{ url_for('fetpredict') }}" method="POST">
+          <div class="form-grid">
+            <div class="input-group">
+              <h3>Baseline value</h3>
+              <input
+                type="text"
+                name="baseline_value"
+                placeholder="100-160"
+                required
+              />
+            </div>
+
+            <div class="input-group">
+              <h3>Accelerations</h3>
+              <input
+                type="text"
+                name="accelerations"
+                placeholder="0-0.020"
+                required
+              />
+            </div>
+
+            <div class="input-group">
+              <h3>Fetal movement</h3>
+              <input
+                type="text"
+                name="fetal_movement"
+                placeholder="0-0.450"
+                required
+              />
+            </div>
+
+            <div class="input-group">
+              <h3>Uterine contractions</h3>
+              <input
+                type="text"
+                name="uterine_contractions"
+                placeholder="e.g., 25"
+                required
+              />
+            </div>
+            <div class="input-group">
+              <h3>Light decelerations</h3>
+              <input
+                type="text"
+                name="light_decelerations"
+                placeholder="0-0.014"
+                required
+              />
+            </div>
+
+            <div class="input-group">
+              <h3>Severe decelerations</h3>
+              <input
+                type="text"
+                name="severe_decelerations"
+                placeholder="0-0.005"
+                required
+              />
+            </div>
+
+            <div class="input-group">
+              <h3>Prolonged decelerations</h3>
+              <input
+                type="text"
+                name="prolonged_decelerations"
+                placeholder="0-0.005"
+                required
+              />
+            </div>
+
+            <div class="input-group">
+              <h3>Abnormal variability</h3>
+              <input
+                type="text"
+                name="abnormal_variability"
+                placeholder="11-85"
+                required
+              />
+            </div>
+
+            <div class="input-group">
+              <h3>Short variability</h3>
+              <input
+                type="text"
+                name="short_variability"
+                placeholder="0-5.8"
+                required
+              />
+            </div>
+
+            <div class="input-group">
+              <h3>Percentage of variability</h3>
+              <input
+                type="text"
+                name="percentage_of_variability"
+                placeholder="0-91"
+                required
+              />
+            </div>
+
+            <div class="input-group">
+              <h3>Long variability</h3>
+              <input
+                type="text"
+                name="long_variability"
+                placeholder="0-0.450"
+                required
+              />
+            </div>
+
+            <div class="input-group">
+              <h3>Histogram width</h3>
+              <input
+                type="text"
+                name="histogram_width"
+                placeholder="26-160"
+                required
+              />
+            </div>
+
+            <div class="input-group">
+              <h3>Histogram min</h3>
+              <input
+                type="text"
+                name="histogram_min"
+                placeholder="50-160"
+                required
+              />
+            </div>
+
+            <div class="input-group">
+              <h3>Histogram max</h3>
+              <input
+                type="text"
+                name="histogram_max"
+                placeholder="120-190"
+                required
+              />
+            </div>
+
+            <div class="input-group">
+              <h3>Histogram of peaks</h3>
+              <input
+                type="text"
+                name="histogram_of_peaks"
+                placeholder="0-20"
+                required
+              />
+            </div>
+
+            <div class="input-group">
+              <h3>Histogram of zeroes</h3>
+              <input
+                type="text"
+                name="histogram_of_zeroes"
+                placeholder="0-10"
+                required
+              />
+            </div>
+
+            <div class="input-group">
+              <h3>Histogram mode</h3>
+              <input
+                type="text"
+                name="histogram_mode"
+                placeholder="75-187"
+                required
+              />
+            </div>
+
+            <div class="input-group">
+              <h3>Histogram mean</h3>
+              <input
+                type="text"
+                name="histogram_mean"
+                placeholder="100-180"
+                required
+              />
+            </div>
+
+            <div class="input-group">
+              <h3>Histogram median</h3>
+              <input
+                type="text"
+                name="histogram_median"
+                placeholder="100-180"
+                required
+              />
+            </div>
+
+            <div class="input-group">
+              <h3>Histogram variance</h3>
+              <input
+                type="text"
+                name="histogram_variance"
+                placeholder="0-210"
+                required
+              />
+            </div>
+            <div class="input-group">
+              <h3>Histogram tendency</h3>
+              <input
+                type="text"
+                name="histogram_tendency"
+                placeholder="-1,0,1"
+                required
+              />
+            </div>
+          </div>
+
+          <button id="sub" type="submit">
+            <i class="fas fa-calculator"></i>
+            Calculate Risk
+          </button>
+        </form>
+          </br>
+	</br>
+      {% if prediction_text %}
+    	 <center><h1> Prediction is : {{ prediction_text }} </h1></center>
+           	 <center><h3> Treatment is : {{ treatment }} </h3></center>
+
+      {% endif %}
+
+      </div>
+    </div>
+  </body>
+</html>
